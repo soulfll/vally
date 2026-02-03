@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 30px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #e0e0e0;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #yes {
+            font-size: 24px;
+            padding: 15px 60px;
+            transition: all 0.4s ease-out;
+        }
+
+        #no {
+            font-size: 18px;
+            padding: 15px 60px;
+            transition: all 0.4s ease-out;
+            white-space: nowrap;
+        }
+
+        .success-page {
+            display: none;
+            text-align: center;
+        }
+
+        .success-page.active {
+            display: block;
+        }
+
+        .fireworks-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 30px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fireworks-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .message {
+            font-size: 24px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainPage">
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="valentine-video.mov" type="video/mp4">
+                <source src="valentine-video.mov" type="video/quicktime">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="buttons">
+            <button id="yes">Yes</button>
+            <button id="no">No</button>
+        </div>
+    </div>
+
+    <div class="container success-page" id="successPage">
+        <div class="fireworks-container">
+            <img src="fireworks.gif" alt="Fireworks" id="fireworksGif">
+        </div>
+        <div class="message">YAYYYY!!!!</div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no');
+        const yesBtn = document.getElementById('yes');
+        const mainPage = document.getElementById('mainPage');
+        const successPage = document.getElementById('successPage');
+        
+        let clickCount = 0;
+        
+        // Different text for each No click
+        const noButtonTexts = [
+            "No",
+            "are you sure?",
+            "are you sure youre sure?",
+            "just press yes",
+            "baby pleaaaaseee",
+            "whyyyyyy pleeeasseee",
+            "i literally kms if u dont press yes"
+        ];
+
+        // Make "Yes" button grow in whimsical random amounts
+        noBtn.addEventListener('mouseover', growYesButton);
+        noBtn.addEventListener('click', handleNoClick);
+
+        function handleNoClick() {
+            clickCount++;
+            
+            // Change the button text based on click count
+            if (clickCount < noButtonTexts.length) {
+                noBtn.textContent = noButtonTexts[clickCount];
+            } else {
+                // Loop back through the messages after the first cycle
+                const loopIndex = ((clickCount - noButtonTexts.length) % (noButtonTexts.length - 1)) + 1;
+                noBtn.textContent = noButtonTexts[loopIndex];
+            }
+            
+            // Also grow the Yes button
+            growYesButton();
+        }
+
+        function growYesButton() {
+            // Random whimsical increases - different every time!
+            const randomSizeIncrease = Math.random() * 8 + 2; // Between 2-10px
+            const randomPaddingIncrease = Math.random() * 6 + 1; // Between 1-7px
+            
+            // Get current size from computed style or default
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            const currentPaddingTop = parseFloat(window.getComputedStyle(yesBtn).paddingTop);
+            const currentPaddingLeft = parseFloat(window.getComputedStyle(yesBtn).paddingLeft);
+            
+            const newSize = currentSize + randomSizeIncrease;
+            const newPaddingTop = currentPaddingTop + randomPaddingIncrease;
+            const newPaddingLeft = currentPaddingLeft + (randomPaddingIncrease * 1.5);
+            
+            yesBtn.style.fontSize = newSize + 'px';
+            yesBtn.style.paddingTop = newPaddingTop + 'px';
+            yesBtn.style.paddingBottom = newPaddingTop + 'px';
+            yesBtn.style.paddingLeft = newPaddingLeft + 'px';
+            yesBtn.style.paddingRight = newPaddingLeft + 'px';
+            
+            // Make No button smaller in random amounts too
+            const currentNoSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+            const currentNoPaddingTop = parseFloat(window.getComputedStyle(noBtn).paddingTop);
+            const currentNoPaddingLeft = parseFloat(window.getComputedStyle(noBtn).paddingLeft);
+            
+            const randomNoDecrease = Math.random() * 3 + 0.5; // Between 0.5-3.5px
+            
+            const noSize = Math.max(10, currentNoSize - randomNoDecrease);
+            const noPaddingTop = Math.max(5, currentNoPaddingTop - (randomNoDecrease * 0.5));
+            const noPaddingLeft = Math.max(20, currentNoPaddingLeft - randomNoDecrease);
+            
+            noBtn.style.fontSize = noSize + 'px';
+            noBtn.style.paddingTop = noPaddingTop + 'px';
+            noBtn.style.paddingBottom = noPaddingTop + 'px';
+            noBtn.style.paddingLeft = noPaddingLeft + 'px';
+            noBtn.style.paddingRight = noPaddingLeft + 'px';
+        }
+
+        // Show success page when Yes is clicked
+        yesBtn.addEventListener('click', () => {
+            mainPage.style.display = 'none';
+            successPage.classList.add('active');
+        });
+    </script>
+</body>
+</html>
